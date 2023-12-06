@@ -1,14 +1,11 @@
 
 
 const router = require('express').Router();
-const multer = require('multer');
 
 const productController = require('../../controllers/admin/product.controller');
-const storageMulterHelper = require('../../helpers/storageMulter');
 const validateProduct = require('../../validates/admin/product.validate');
-const storage = storageMulterHelper();
-
-const upload = multer({storage: storage});
+// const upload = require('../../helpers/UploadLocalMulter');
+const upload = require('../../helpers/UploadCloudinary');
 
 router.get('/', productController.index);
 router.get('/trash', productController.index);
