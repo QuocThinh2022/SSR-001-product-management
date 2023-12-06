@@ -167,8 +167,11 @@ const createProduct = async(req, res) => {
 
         const product = new Products(req.body);
         await product.save();
+        
+        req.flash('success', 'Tao san pham thanh cong!')
         res.redirect(`/${systemConfig.PREFIX_ADMIN}/products`)
     } catch(error) {
+        req.flash('error', 'Tao san pham KHONG thanh cong!')
         throw new Error(error)
     }
 }
@@ -223,7 +226,7 @@ const deleteTrashItem = async (req, res) => {
    try {
         const {pid} = req.params;
         await Products.findByIdAndDelete(pid);
-        req.flash('success', 'Undo ban ghi thanh cong');
+        req.flash('success', 'Xoa ban ghi thanh cong');
         res.redirect('back');
    } catch (error) {
     throw new Error(error)
