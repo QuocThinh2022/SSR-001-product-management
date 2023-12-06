@@ -107,7 +107,7 @@ if (formChangeMulti) {
         e.preventDefault();
         const inputsChecked = checkboxMulti.querySelectorAll('input[name="id"]:checked');
         const typeChange = e.target.elements.type.value;
-        if (typeChange == 'delete-all' || typpeChange == 'delete-trash-all') {
+        if (typeChange == 'delete-all' || typeChange == 'delete-trash-all') {
             const isConfirm = confirm('Ban co chac muon xoa nhung ban ghi nay?');
             if (!isConfirm)
                 return;            
