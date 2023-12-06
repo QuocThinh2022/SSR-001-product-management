@@ -107,7 +107,7 @@ if (formChangeMulti) {
         e.preventDefault();
         const inputsChecked = checkboxMulti.querySelectorAll('input[name="id"]:checked');
         const typeChange = e.target.elements.type.value;
-        if (typeChange == 'delete-all') {
+        if (typeChange == 'delete-all' || typpeChange == 'delete-trash-all') {
             const isConfirm = confirm('Ban co chac muon xoa nhung ban ghi nay?');
             if (!isConfirm)
                 return;            
@@ -177,6 +177,7 @@ const buttonsDeleteTrash = document.querySelectorAll('[button-delete-trash]');
 if (buttonsDeleteTrash.length > 0) {
     const formDeleteTrashItem = document.querySelector('#form-delete-trash-item');
     const path = formDeleteTrashItem.getAttribute('data-path');
+
     buttonsDeleteTrash.forEach(button => {
         button.addEventListener('click', () => {
             const confirmDelete = confirm("Ban co chac muon xoa ban ghi nay?");
