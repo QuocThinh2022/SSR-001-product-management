@@ -1,0 +1,121 @@
+extends ../../layouts/default 
+include ../../mixins/filter-status.pug
+include ../../mixins/search.pug
+include ../../mixins/pagination.pug
+include ../../mixins/change-multi.pug
+include ../../mixins/alert.pug
+
+block main 
+    +alert-success(2500)
+    +alert-error(3000)
+    h1(class='mb-4') Danh sach cac san pham 
+
+    .card.mb-3
+        .card-header Filter and Search
+        .card-body 
+            .row
+                .col-6 
+                    +filter-status(filterStatus)
+                .col-6 
+                    +search(keyword)
+
+    .card.mb-3 
+        .card-header Danh sach 
+        .card-body
+            .row 
+                .col-8
+                    +change-multi(`/${prefixAdmin}/products/change-multi?_method=PATCH`)
+                .col-4 
+                    a(
+                        href=`/${prefixAdmin}/products/create`
+                        class='btn btn-outline-success'
+                    ) + Create
+            table(
+                class='table table-hover table-sm'
+                checkbox-multi
+            )
+                thead 
+                    tr
+                        th 
+                            input(type='checkbox' name='checkall')
+                        th STT 
+                        th Hinh anh 
+                        th Tieu de 
+                        th Gia 
+                        th vi tri
+                        th Trang thai 
+                        th Hanh dong 
+                tbody 
+                    if (products.length > 0)
+                        each product, index in products 
+                            tr 
+                                td 
+                                    input(type='checkbox' name='id', value=product.id)
+                                td #{index + 1 + pagination.skip}
+                                td 
+                                    img(
+                                        src=product.thumbnail
+                                        alt=product.title
+                                        width='100px'
+                                        height='auto'
+                                    )
+                                td #{product.title}
+                                td $#{product.price}
+                                td 
+                                    input(type='number'
+                                        value=product.position
+                                        style='width: 60px'
+                                        min='1'
+                                        name='position'
+                                    )
+                                td  
+                                    if (product.status == 'active')
+                                        button(
+                                            class='badge badge-success'
+                                            button-change-status 
+                                            data-status=product.status 
+                                            data-id=product.id
+                                        ) active 
+                                    else 
+                                        button(
+                                            class='badge badge-danger'
+                                            button-change-status 
+                                            data-status=product.status 
+                                            data-id=product.id
+                                        ) inactive 
+                                td 
+                                    a(
+                                        href=`/${prefixAdmin}/products/detail/${product.id}`
+                                        class='btn btn-sm'
+                                    ) <i class="fa-regular fa-eye"></i>
+                                    a(
+                                        href=`/${prefixAdmin}/products/edit/${product.id}`
+                                        class='btn btn-warning btn-sm'
+                                    ) <i class="fa-solid fa-pen-ruler"></i>
+                                    button(
+                                        class='btn btn-danger btn-sm ml-1'
+                                        button-delete
+                                        data-id=product.id
+                                    ) <i class="fa-solid fa-trash"></i>
+                    else 
+                        tr 
+                            td(
+                                colspan='8'
+                                class='text-center'
+                            ) Khong tim thay san pham nao
+
+    form(
+        id='form-change-status'
+        method='POST'
+        action=``
+        data-path=`/${prefixAdmin}/products/change-status`
+    )
+
+    form(
+        id='form-delete-item'
+        method='POST'
+        action=``
+        data-path=`/${prefixAdmin}/products/delete`
+    )
+
+    +pagination(pagination)
