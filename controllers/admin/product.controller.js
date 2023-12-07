@@ -162,7 +162,7 @@ const createProduct = async(req, res) => {
         }
 
         if (req.file) {
-            req.body.thumbnail = req.file.path;
+            req.body[req.file.fieldname] = req.file.path;
         }
 
         const product = new Products(req.body);
@@ -184,8 +184,9 @@ const editProduct = async(req, res) => {
         req.body.stock = parseInt(req.body.stock);
         req.body.discountPercentage = parseInt(req.body.discountPercentage);
         req.body.position = parseInt(req.body.position);
-        if (req.file && req.file.filename) {
-            req.body.thumbnail = `/uploads/${req.file.filename}`;
+        
+        if (req.file) {
+            req.body[req.file.fieldname] = req.file.path;
         }
 
         await Products.findByIdAndUpdate(pid, req.body);

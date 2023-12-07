@@ -13,7 +13,10 @@ const productSchema = new mongoose.Schema({
     price: Number,
     discountPercentage: Number,
     stock: Number,
-    thumbnail: String,
+    thumbnail: {
+        type: String,
+        default: 'https://res-console.cloudinary.com/deqclwsve/thumbnails/v1/image/upload/v1700020857/Y2xkLXNhbXBsZS0y/grid_landscape'
+    },
     status: String,
     position: Number,
     deleted: {
