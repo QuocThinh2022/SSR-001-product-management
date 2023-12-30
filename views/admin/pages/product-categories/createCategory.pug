@@ -1,0 +1,79 @@
+extends ../../layouts/default 
+include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
+
+block main 
+    +alert-error(3500)
+    h1(class='mb-4') Them moi danh muc san pham 
+    
+    form(
+        action=`/${prefixAdmin}/product-categories/create`
+        method='POST'
+        enctype='multipart/form-data'
+    )
+        div(class='form-group')
+            label(for='title') Tieu de 
+            input(
+                type='text'
+                class='form-control'
+                id='title'
+                name='title'
+                required
+            )
+        div(class='form-group')
+            label(for='parent_id') Danh muc cha
+            
+            select(
+                name='parent_id'
+                id='parent_id'
+                class='form-control'
+            )
+                option(value='') -- Chon danh muc cha --
+                +select-tree(categories)
+
+        div(clas='form-group')
+            label(for='desc') Mo ta 
+            textarea(
+                type='text'
+                class='form-control textarea-tinymce'
+                id='desc'
+                name='description'
+                textarea-tinymce
+            )
+        div(class='form-group mt-3' upload-image)
+            label(for='thumbnail') Anh 
+            input(
+                type='file'
+                id='thumbnail'
+                name='thumbnail'
+                class='form-control-file'
+                accept='image/*'
+                upload-image-input
+            )
+            img(
+                src=''
+                class='image-preview'
+                upload-image-preview
+            )
+        
+        div(class='form-group')
+            label(for='position') Vi tri 
+            input(
+                type='number'
+                class='form-control'
+                id='position'
+                name='position'
+                placeholder='Tu dong tang'
+                min='1'
+            )
+
+        div(class='form-group')
+            button(
+                type='submit'
+                class='btn btn-primary'
+            ) Create
+
+            a(
+                href=`/${prefixAdmin}/product-categories`
+                class='btn btn-outline'
+             ) Cancel

@@ -4,8 +4,8 @@ const router = require('express').Router();
 
 const productController = require('../../controllers/admin/product.controller');
 const validateProduct = require('../../validates/admin/product.validate');
-// const upload = require('../../helpers/UploadLocalMulter');
-const upload = require('../../helpers/UploadCloudinary');
+// const upload = require('../../middlewares/admin/UploadLocalMulter');
+const upload = require('../../middlewares/admin/UploadCloudinary');
 
 router.get('/', productController.index);
 router.get('/trash', productController.index);

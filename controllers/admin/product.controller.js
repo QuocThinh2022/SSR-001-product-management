@@ -6,6 +6,7 @@ const paginationHelper = require('../../helpers/pagination');
 const systemConfig = require('../../config/system');
 
 // [GET] /admin/products
+// [GET] /admin/products/trash
 const index = async (req, res) => {
     try {
         const isTrash = (req._parsedUrl.pathname == '/trash');
@@ -32,10 +33,22 @@ const index = async (req, res) => {
         let countProducts = await Products.countDocuments(find);
         let objectPagination = paginationHelper(req.query, initPagination, countProducts);
 
+        // sort
+        let sort = {}
+        if (req.query.sortKey) {
+            let value = 'asc';
+            if (req.query.sortValue == 'desc') {
+                value = req.query.sortValue
+            }
+            sort[req.query.sortKey] = value;
+        } else {
+            sort = {position: 'desc'}
+        }
+
         const products = await Products.find(find)
             .skip(objectPagination.skip)
             .limit(objectPagination.limitItem)
-            .sort({position: 'desc'});
+            .sort(sort);
         if (isTrash) {
             res.render('admin/pages/products/trash.pug', {
                 pageTitle: 'page products',

@@ -225,3 +225,34 @@ if (uploadImage) {
     
 }
 // end upload image 
+
+// sort 
+const sortDiv = document.querySelector('[sort-div]');
+if (sortDiv) {
+    let url = new URL(window.location.href);
+    const sortSelect = sortDiv.querySelector('[sort-select]');
+    const sortClear = sortDiv.querySelector('[sort-clear]');
+    sortSelect.addEventListener('change', (e) => {
+        const [sortKey, sortValue] = e.target.value.split('-');
+        url.searchParams.set('sortKey', sortKey);
+        url.searchParams.set('sortValue', sortValue);
+        window.location.href = url.href;
+    })
+
+    // hien thi lua chon sap xep (select)
+    const sortKey = url.searchParams.get('sortKey');
+    const sortValue = url.searchParams.get('sortValue');
+    if (sortKey && sortValue) {
+        const stringSort = `${sortKey}-${sortValue}`;
+        const optionSelected = sortSelect.querySelector(`option[value='${stringSort}']`)
+        optionSelected.selected = true;
+    }
+
+    // xoa chon sap xep (clear)
+    sortClear.addEventListener('click', () => {
+        url.searchParams.delete('sortKey');
+        url.searchParams.delete('sortValue');
+        window.location.href = url.href;
+    })
+}
+// end sort 

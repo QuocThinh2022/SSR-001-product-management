@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const path = require('path');
 
 require('dotenv').config();
 
@@ -19,6 +20,9 @@ database.connect();
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'pug');
 app.use(express.static(`${__dirname}/public`));
+
+// TinyMCE
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
 
 // flash 
 app.use(cookieParser('keyrandom'));
