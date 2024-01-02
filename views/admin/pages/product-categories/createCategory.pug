@@ -66,6 +66,25 @@ block main
                 placeholder='Tu dong tang'
                 min='1'
             )
+        div(class='form-group form-check form-check-inline')
+            input(
+                type='radio'
+                class='form-check-input'
+                id='statusActive'
+                name='status'
+                value='active'
+            )
+            label(for='statusActive' class='form-check-label') Hoat dong 
+        div(class='form-group form-check form-check-inline')
+            input(
+                type='radio'
+                class='form-check-input'
+                id='statusInActive'
+                name='status'
+                value='inactive'
+                checked
+            )
+            label(for='statusInActive' class='form-check-label') Dung hoat hong 
 
         div(class='form-group')
             button(

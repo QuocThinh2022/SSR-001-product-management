@@ -1,9 +1,11 @@
 
 const Products = require('../../models/product.model');
+const ProductCategories = require('../../models/product-categories.model');
 const filterStatusHelper = require('../../helpers/filterStatus');
 const searchHelper = require('../../helpers/search');
 const paginationHelper = require('../../helpers/pagination');
 const systemConfig = require('../../config/system');
+const createTree = require('../../helpers/createTree');
 
 // [GET] /admin/products
 // [GET] /admin/products/trash
@@ -76,7 +78,14 @@ const getProductEdit = async (req, res) => {
     try {
         const {pid} = req.params;
         const product = await Products.findById(pid);
-        res.render('admin/pages/products/edit.pug', {pageTitle: 'Edit Product', product})
+        const category = await ProductCategories.findById(product.product_category_id);
+        let categories = await ProductCategories.find({deleted: false});
+        categories = createTree(categories);
+        res.render('admin/pages/products/edit.pug', {pageTitle: 'Edit Product',
+            product,
+            category,
+            categories
+        })
     } catch(error) {
         req.flash('error', 'san pham nay khong ton tai!');
         res.redirect(`/${systemConfig.PREFIX_ADMIN}/products`)
@@ -153,8 +162,11 @@ const changeMulti = async (req, res) => {
 // [GET] /admin/products/create
 const create = async(req, res) => {
     try {
+        let categories = await ProductCategories.find({deleted: false});
+        categories = createTree(categories);
         res.render('admin/pages/products/create.pug', {
-            pageTitle: 'Create New Product'
+            pageTitle: 'Create New Product',
+            categories
         });
     } catch(error) {
         throw new Error(error)

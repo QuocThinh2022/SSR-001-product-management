@@ -1,5 +1,6 @@
 extends ../../layouts/default 
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
 
 block main
     +alert-error(3500)
@@ -21,6 +22,17 @@ block main
                 value=product.title
                 required
             )
+        div(class='form-group')
+            label(for='product_category_id') Danh muc
+            
+            select(
+                name='product_category_id'
+                id='product_category_id'
+                class='form-control'
+            )
+                option(value='') -- Chon danh muc --
+                +select-tree(categories, 1, category.id)
+                
         div(class='form-group')
             label(for='desc') mo ta 
             textarea(

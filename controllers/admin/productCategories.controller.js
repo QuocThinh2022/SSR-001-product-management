@@ -49,10 +49,35 @@ async function createCategory(req, res) {
     res.redirect(`/${systemConfig.PREFIX_ADMIN}/product-categories`)
 }
 
+// [GET] admin/product-categories/edit/:pcid
+async function getEdit(req, res) {
+    const {pcid} = req.params;
+    const category = await ProductCategories.findById(pcid, {deleted: false}, {new: true});
+    let categories = await ProductCategories.find({deleted: false}).select('title parent_id');
+    
+    categories = createTree(categories);
+    res.render('admin/pages/product-categories/editCategory', {
+        category,
+        categories
+    })
+}
+
+// [PATCH] admin/product-categories/edit/:pcid
+async function editCategory(req, res) {
+    const {pcid} = req.params;
+    req.body.position = parseInt(req.body.position);
+    await ProductCategories.findByIdAndUpdate(pcid, req.body)
+    
+    req.flash('success', `Cap nhat thanh cong danh muc: ${req.body.title}`);
+    res.redirect(`/${systemConfig.PREFIX_ADMIN}/product-categories`)
+}
+
 module.exports = {
     getCategories,
     getCreate,
     createCategory,
+    getEdit,
+    editCategory,
 
 
 }

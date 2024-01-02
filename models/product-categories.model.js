@@ -27,6 +27,10 @@ const productCategoriesSchema = new mongoose.Schema(
             type: String,
             default: 'https://res-console.cloudinary.com/deqclwsve/thumbnails/v1/image/upload/v1700020857/Y2xkLXNhbXBsZS0y/grid_landscape'
         },
+        status: {
+            type: String,
+            default: 'inactive'
+        }
     },{
         timestamps: true
     }

@@ -2,16 +2,12 @@ extends ../../layouts/default
 include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 
-block main
-    
+block main 
     +alert-error(3500)
-
-    h1(class='mb-4') Tao moi san pham
-
-
+    h1(class='mb-4') Chinh sua danh muc san pham 
+    
     form(
-        action=`/${prefixAdmin}/products/create`
-        id='form-create-product'
+        action=`/${prefixAdmin}/product-categories/edit/${category.id}?_method=PATCH`
         method='POST'
         enctype='multipart/form-data'
     )
@@ -23,70 +19,44 @@ block main
                 id='title'
                 name='title'
                 required
+                value=category.title
             )
         div(class='form-group')
-            label(for='product_category_id') Danh muc
+            label(for='parent_id') Danh muc cha
             
             select(
-                name='product_category_id'
-                id='product_category_id'
+                name='parent_id'
+                id='parent_id'
                 class='form-control'
             )
-                option(value='') -- Chon danh muc --
-                +select-tree(categories)
-        div(class='form-group')
-            label(for='desc') mo ta 
+                option(value='') -- Chon danh muc cha --
+                +select-tree(categories, 1, category.parent_id)
+
+        div(clas='form-group')
+            label(for='desc') Mo ta 
             textarea(
-                class='form-control'
+                type='text'
+                class='form-control textarea-tinymce'
                 id='desc'
                 name='description'
-                rows='5'
-            )
-        div(class='form-group')
-            label(for='price') Gia
-            input(
-                type='number'
-                class='form-control'
-                id='price'
-                name='price'
-                value='0'
-                min='0'
-            )
-        div(class='form-group')
-            label(for='discount') % Giam gia 
-            input(
-                type='number'
-                class='form-control'
-                id='discount'
-                name='discountPercentage'
-                value='0'
-                min='0'
-            )
-        div(class='form-group')
-            label(for='stock') So luong 
-            input(
-                type='number'
-                class='form-control'
-                id='stock'
-                name='stock'
-                value='0'
-                min='0'
-            )
-        div(class='form-group' upload-image)
+                textarea-tinymce
+            ) #{category.description}
+        div(class='form-group mt-3' upload-image)
             label(for='thumbnail') Anh 
             input(
                 type='file'
-                class='form-control-file'
                 id='thumbnail'
                 name='thumbnail'
+                class='form-control-file'
                 accept='image/*'
                 upload-image-input
             )
             img(
-                src=''
+                src=category.thumbnail
                 class='image-preview'
                 upload-image-preview
             )
+        
         div(class='form-group')
             label(for='position') Vi tri 
             input(
@@ -96,6 +66,7 @@ block main
                 name='position'
                 placeholder='Tu dong tang'
                 min='1'
+                value=category.position
             )
         div(class='form-group form-check form-check-inline')
             input(
@@ -104,7 +75,7 @@ block main
                 id='statusActive'
                 name='status'
                 value='active'
-                checked
+                checked=(category.status == 'active' ? true:false)
             )
             label(for='statusActive' class='form-check-label') Hoat dong 
         div(class='form-group form-check form-check-inline')
@@ -114,10 +85,17 @@ block main
                 id='statusInActive'
                 name='status'
                 value='inactive'
+                checked=(category.status == 'inactive' ? true:false)
             )
             label(for='statusInActive' class='form-check-label') Dung hoat hong 
+
         div(class='form-group')
             button(
                 type='submit'
                 class='btn btn-primary'
-            ) Tao moi
+            ) Update
+
+            a(
+                href=`/${prefixAdmin}/product-categories`
+                class='btn btn-outline'
+             ) Cancel
