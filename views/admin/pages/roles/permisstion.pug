@@ -1,0 +1,56 @@
+extends ../../layouts/default
+
+include ../../mixins/alert.pug
+
+block main 
+    +alert-success(2500)
+    +alert-error(3000)
+    h1(class='mb-4') Phan quyen
+
+    div(class='text-right')
+        button(
+            type='submit'
+            class='btn btn-primary mb-3'
+            button-submit
+        ) Update
+
+    table(
+        class='table table-hover table-sm'
+        table-permissions
+    )
+        thead 
+            tr 
+                th Tinh nang 
+                each role in roles
+                    th(class='text-center') #{role.title} 
+        tbody 
+            tr(data-name='id')
+                td 
+                each role in roles 
+                    td(class='text-center')
+                        input(type='text' value=role.id)
+            tr 
+                td(colspan=roles.length)
+                    b Danh muc san pham
+            tr(data-name='products-category_view')
+                td Xem 
+                each role in roles
+                    td(class='text-center')
+                        input(type='checkbox')
+            tr(data-name='products-category_create')
+                td them moi 
+                each role in roles 
+                    td(class='text-center')
+                        input(type='checkbox')
+            tr(data-name='product-category_edit')
+                td Chinh sua 
+                each role in roles 
+                    td(class='text-center')
+                        input(type='checkbox')
+            tr(data-name='product-category_delete')
+                td Xoa
+                each role in roles
+                    td(class='text-center')
+                        input(type='checkbox')
+                        
+    script(src='/admin/js/role.js')

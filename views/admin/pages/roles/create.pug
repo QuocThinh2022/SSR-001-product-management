@@ -1,0 +1,35 @@
+extends ../../layouts/default
+
+include ../../mixins/alert.pug
+
+block main 
+    +alert-success(2500)
+    +alert-error(3000)
+    h1(class='mb-4') Tao moi Nhom quyen
+
+    form(
+        action=`/${prefixAdmin}/roles/create`
+        method='POST'
+    )
+        div(class='form-group')
+            label(form='title') Tieu de 
+            input(
+                type='text'
+                class='form-control'
+                id='title'
+                name='title'
+                required
+            )
+        div(class='form-group')
+            label(for='desc') Mo ta 
+            input(
+                type='text'
+                class='form-control'
+                id='desc'
+                name='description'
+            )
+        div(class='form-group')
+            button(
+                type='submit'
+                class='btn btn-primary'
+            ) Tao moi

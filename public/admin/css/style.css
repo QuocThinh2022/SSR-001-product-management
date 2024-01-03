@@ -106,3 +106,11 @@
     display: none;
 }
 /* end image preview  */
+
+
+/* input  */
+input[type=checkbox] {
+    width: 20px;
+    height: 20px;
+}
+/* end input  */
