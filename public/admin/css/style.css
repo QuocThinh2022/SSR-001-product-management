@@ -114,3 +114,12 @@ input[type=checkbox] {
     height: 20px;
 }
 /* end input  */
+
+
+/* main-auth */
+.main-auth {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+/* end main-auth  */

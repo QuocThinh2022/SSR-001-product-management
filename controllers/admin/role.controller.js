@@ -59,14 +59,56 @@ async function editRole(req, res) {
     }
 }
 
-// [GET] /admin/roles/permisstions
-async function getPermisstion(req, res) {
-    const roles = await Role.find({deleted: false}).select('title');
-    res.render(`admin/pages/roles/permisstion`, {
-        pageTitle: 'Permisstion',
+// [GET] /admin/roles/permissions
+async function getPermission(req, res) {
+    const roles = await Role.find({deleted: false}).select('title description permissions deleted');
+    res.render(`admin/pages/roles/permission`, {
+        pageTitle: 'Permission',
         roles,
     });
 }
+
+// [PATCH] /admin/roles/permissions
+async function updatePermissions(req, res) {
+    try {
+        const permissions = JSON.parse(req.body.permissions);
+        for (const item of permissions) {
+            await Role.findByIdAndUpdate(item.id, {permissions: item.permissions});
+        }
+
+        req.flash('success', `Permissions thanh cong!`);
+        res.redirect(`back`)
+    } catch {
+        req.flash('error', `Permissions that bai!`);
+        res.redirect(`back`)
+    }
+}
+
+// [GET] /admin/roles/detail/:rid
+async function getDetail(req, res) {
+    const {rid} = req.params;
+    const role = await Role.findById(rid);
+    res.render(`admin/pages/roles/detail.pug`, {
+        pageTitle: 'Detail Role',
+        role,
+    });
+}
+
+// [DELETE] /admin/roels/delete/:rid 
+async function deleteRole(req, res) {
+    try {
+        
+        const {rid} = req.params;
+        const role = await Role.findByIdAndDelete(rid);
+        req.flash('success', `Delete Role thanh cong!`);
+        res.redirect(`back`)
+    } catch {
+        req.flash('error', `Delete Role that bai!`);
+        res.redirect(`back`)
+    }
+}
+
+
 
 module.exports = {
     index,
@@ -74,5 +116,9 @@ module.exports = {
     createRole,
     getEdit,
     editRole,
-    getPermisstion
+    getDetail,
+    deleteRole,
+    getPermission,
+    updatePermissions,
+
 }

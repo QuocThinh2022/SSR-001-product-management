@@ -1,0 +1,26 @@
+mixin table-permissions(roles, operators = [])
+    table(
+        class='table table-hover table-sm'
+        table-permissions
+    )
+        thead 
+            tr 
+                th Tinh nang
+                each role in roles
+                    th(class='text-center') #{role.title} 
+        tbody 
+            tr(data-name='id' class='d-none')
+                td 
+                each role in roles 
+                    td(class='text-center')
+                        input(type='text' value=role.id)
+            each operator in operators
+                tr 
+                    td(colspan=roles.length)
+                        b #{operator.group}
+                each item in operator.permissions
+                    tr(data-name=item[1])
+                        td #{item[0]}
+                        each role in roles
+                            td(class='text-center')
+                                input(type='checkbox')

@@ -1,0 +1,100 @@
+extends ../../layouts/default
+
+
+block main 
+    h1(class='mb-4') Chinh sua tai khoan 
+
+    form(
+        action=`/${prefixAdmin}/accounts/edit/${account.id}?_method=PATCH`
+        method="POST"
+        enctype='multipart/form-data'
+    )
+        div(class='form-group')
+            label(for='fullname') Ho ten *
+            input(
+                type='text'
+                class='form-control'
+                id='fullname'
+                name='fullname'
+                value=account.fullname
+                required
+            )
+        div(class='form-group')
+            label(for='email') Email *
+            input(
+                type='email'
+                class='form-control'
+                id='email'
+                name='email'
+                value=account.email
+                required
+            )
+        
+        div(class='form-group')
+            label(for='password') Mat khau *
+            input(
+                type='password'
+                class='form-control'
+                id='password'
+                name='password'
+            )
+
+        div(class='form-group')
+            label(for='phone') So dien thoai 
+            input(
+                type='text'
+                class='form-control'
+                id='phone'
+                name='phone'
+                value=account.phone
+            )
+        div(
+            class='form-group'
+            upload-image
+        )
+            label(for='avatar') avatar 
+            input(
+                type='file'
+                class='form-control-file'
+                id='avatar'
+                name='avatar'
+                accept='image/*'
+                upload-image-input
+            )    
+            img(
+                src=account.avatar
+                class='image-preview'
+                upload-image-preview
+            )
+        div(class='form-group')
+            label(for='role_id') Phan quyen
+            select(name='role_id' id='role_id' class='form-control')
+                option(disabled) -- Chon --
+                each role in roles 
+                    option(value=role.id selected=(role.id == account.role_id ? true:false)) #{role.title}
+
+        div(class='form-group form-check form-check-inline')
+            input(
+                type='radio'
+                class='form-check-input'
+                id='statusActive'
+                name='status'
+                value='active'
+                checked=(account.status=='active' ? true:false)
+            )
+            label(for='statusActive' class='form-check-label') Hoat dong 
+        div(class='form-group form-check form-check-inline')
+            input(
+                type='radio'
+                class='form-check-input'
+                id='statusInactive'
+                name='status'
+                value='inactive'
+                checked=(account.status=='inactive' ? true:false)
+            )
+            label(for='statusInactive' class='form-check-label') Dung hoat dong 
+        div(class='form-group')
+            button(
+                type='submit'
+                class='btn btn-primary'
+            ) Update

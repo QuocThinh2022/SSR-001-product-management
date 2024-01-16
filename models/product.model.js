@@ -22,14 +22,29 @@ const productSchema = new mongoose.Schema({
         default: 'https://res-console.cloudinary.com/deqclwsve/thumbnails/v1/image/upload/v1700020857/Y2xkLXNhbXBsZS0y/grid_landscape'
     },
     status: String,
+    featured: String,
     position: Number,
     deleted: {
         type: Boolean,
         default: false
-    }
-},
-{
-    timestamps: true
+    },
+    deletedBy: {
+        account_id: String,
+        deletedAt: Date
+    },
+    createdBy: {
+        account_id: String,
+        createAt:{
+            type: Date,
+            default: Date.now
+        }
+    },
+    updatedBy: [
+        {
+            account_id: String,
+            updatedAt: Date
+        }
+    ]
 })
 
 

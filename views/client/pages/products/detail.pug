@@ -1,39 +1,62 @@
-extends ../../layout/default 
+extends ../../layouts/default 
 include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
 
 block main 
-    .container.my-3 
-    .row 
-        .col-12 
-            +box-head('Detail')
-    
-    .row
-        .col-12
-            if (product) 
-                if (product.title)
-                    h1(class='mb-4') Title: #{product.title} 
-                if (product.price)
-                    div(class='mb-4') Gia: <b>#{product.price}</b>
-                if (product.discountPercentage)
-                    div(class='mb-4') Giam gia: <b>#{product.discountPercentage}</b>
-                if (product.stock)
-                    div(class='mb-4') Con lai: <b>#{product.stock}</b>
-                if (product.thumbnail)
-                    div(class='mb-4')
-                        img(
-                            src=product.thumbnail 
-                            style='width: 100px'
-                        )
-                if (product.status)
-                    div(class='mb-4')
-                        span Trang thai: 
-                        if (product.status === 'active')
-                            span(class='badge badge-success') Hoat dong 
+    +alert-success(2500)
+
+    if (product)
+        .product-detail
+            .container.my-5
+                button(
+                    class='btn btn-secondary mb-2'
+                    button-go-back
+                ) Tro lai
+                .row 
+                    .col-6
+                        .inner-thumb 
+                            img(src=product.thumbnail, alt=product.title)
+                    .col-6
+                        h1(class='mb-4') #{product.title} 
+
+                        if (product.category)
+                            .inner-category 
+                                span Danh muc: 
+                                a(href=`/products/${product.category.slug}`) #{product.category.title}
+
+                        if (product.priceNew)
+                            .inner-price-new $#{product.priceNew}
+                        if (product.price)
+                            .inner-price-old $#{product.price}
+                        if (product.discountPercentage)
+                            .inner-percentage Giam toi <span>#{product.discountPercentage}%</span>
+                        if (product.stock)
+                            .inner-stock Con lai <span>#{product.stock}</span> san pham
                         else 
-                            span(class='badge badge-danger') Ngung hoat dong
-                if (product.position)
-                    div(class='mb-4') Vi tri: <b>#{product.position}</b>
-                if (product.description)
-                    div(class='mb-4') !{product.description}
-            else 
-                div Lam gi co san pham nao
+                            .inner-stock.alert.alert-danger.text-center Tam thoi het hang
+
+                        form(
+                            action=`/cart/add/${product.id}`
+                            method='POST'
+                        )
+                            input(
+                                type='number'
+                                class='form-control mb-2'
+                                name='quantity'
+                                value='1'
+                                min='1'
+                                max=product.stock
+                            )
+                            button(
+                                type='submit'
+                                class='btn btn-success btn-block'
+                            ) + Them vao gio hang
+
+        .container.my-5
+            .row 
+                .col-12 
+                    +box-head('Mo ta san pham')
+                    .inner-desc !{product.description}
+    else 
+        div Lam gi co san pham nao
+        

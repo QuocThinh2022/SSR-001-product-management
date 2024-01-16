@@ -4,6 +4,7 @@ include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/change-multi.pug
 include ../../mixins/alert.pug
+include ../../mixins/moment.pug
 
 block main 
     +alert-success(2500)
@@ -37,6 +38,7 @@ block main
                         th Gia 
                         th vi tri
                         th Trang thai 
+                        th Xoa boi
                         th Hanh dong 
                 tbody 
                     if (products.length > 0)
@@ -76,6 +78,10 @@ block main
                                             data-status=product.status 
                                             data-id=product.id
                                         ) inactive 
+                                td 
+                                    div #{product.deletedBy.accountFullName}
+                                    div 
+                                        +formatDateTime(product.deletedBy.deletedAt)
                                 td  
                                     button(
                                         class='btn btn-success btn-sm'

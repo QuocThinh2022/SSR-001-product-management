@@ -1,0 +1,62 @@
+extends ../../layouts/default.pug 
+
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+
+block main 
+    +alert-success(2500)
+    +alert-error(3500)
+
+    .container.my-3 
+        .row 
+            .col-12
+                +box-head('Gio hang')
+    
+        .row
+            .col-12
+                if (cartDetail && cartDetail.products.length > 0)
+                    table(class='table table-bordered')
+                        thead
+                            tr
+                                th STT
+                                th Anh
+                                th Ten
+                                th Gia
+                                th So luong
+                                th Tong tien
+                                th Hanh dong
+                        tbody
+                            each product, index in cartDetail.products
+                                tr 
+                                    td #{index+1}
+                                    td
+                                        img(src=product.productInfo.thumbnail alt=product.productInfo.title, width='80px')
+                                    td
+                                        a(href=`/products/deltail/${product.productInfo.slug}`) #{product.productInfo.title}
+                                    td $#{product.productInfo.priceNew}
+                                    td
+                                        input(
+                                            type='number'
+                                            name='quantity'
+                                            value=product.quantity
+                                            min='1'
+                                            max=product.productInfo.stock
+                                            product-id=product.product_id
+                                            style='width: 60px'
+                                        )
+                                    td $#{product.totalPrice}
+                                    td
+                                        a(
+                                            href=`/cart/delete/${product.product_id}`
+                                            class='btn btn-danger'
+                                        ) Del
+                    h3.text-right Tong don hang: $#{cartDetail.totalPrice}
+
+                    .text-right.mt-3 
+                        a(href='/checkout' class='btn btn-success') THANH TOAN
+                else 
+                    h1 Khong co san pham nao trong gio hang 
+                    button tiep tuc mua sam
+                    
+                    
+    script(src="/js/cart.js") 

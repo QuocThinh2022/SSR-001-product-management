@@ -1,0 +1,100 @@
+extends ../../layouts/default
+
+include ../../mixins/alert.pug
+
+block main 
+    +alert-success(2500)
+    +alert-error(3000)
+    h1(class='mb-4') Tao tai khoan 
+
+    form(
+        action=`/${prefixAdmin}/accounts/create`
+        method="POST"
+        enctype='multipart/form-data'
+    )
+        div(class='form-group')
+            label(for='fullname') Ho ten *
+            input(
+                type='text'
+                class='form-control'
+                id='fullname'
+                name='fullname'
+                required
+            )
+        div(class='form-group')
+            label(for='email') Email *
+            input(
+                type='email'
+                class='form-control'
+                id='email'
+                name='email'
+                required
+            )
+        
+        div(class='form-group')
+            label(for='password') Mat khau *
+            input(
+                type='password'
+                class='form-control'
+                id='password'
+                name='password'
+                required
+            )
+
+        div(class='form-group')
+            label(for='phone') So dien thoai 
+            input(
+                type='text'
+                class='form-control'
+                id='phone'
+                name='phone'
+            )
+        div(
+            class='form-group'
+            upload-image
+        )
+            label(for='avatar') avatar 
+            input(
+                type='file'
+                class='form-control-file'
+                id='avatar'
+                name='avatar'
+                accept='image/*'
+                upload-image-input
+            )    
+            img(
+                src=''
+                class='image-preview'
+                upload-image-preview
+            )
+        div(class='form-group')
+            label(for='role_id') Phan quyen
+            select(name='role_id' id='role_id' class='form-control')
+                option(disabled) -- Chon --
+                each role in roles 
+                    option(value=role.id) #{role.title}
+
+        div(class='form-group form-check form-check-inline')
+            input(
+                type='radio'
+                class='form-check-input'
+                id='statusActive'
+                name='status'
+                value='active'
+                checked
+            )
+            label(for='statusActive' class='form-check-label') Hoat dong 
+        div(class='form-group form-check form-check-inline')
+            input(
+                type='radio'
+                class='form-check-input'
+                id='statusInactive'
+                name='status'
+                value='inactive'
+            )
+            label(for='statusInactive' class='form-check-label') Dung hoat dong 
+        div(class='form-group')
+            button(
+                type='submit'
+                class='btn btn-primary'
+            ) Tao moi

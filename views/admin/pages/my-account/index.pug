@@ -1,0 +1,32 @@
+extends ../../layouts/default 
+
+include ../../mixins/alert.pug
+block main 
+    +alert-success(2500)
+    +alert-error(3000)
+
+    h1.mb-4 Thong tin ca nhan 
+
+    img(src=user.avatar alt='avatar' width='150px' class='mb-3')
+
+    if (user.fullname)
+        p Hoten: <b>#{user.fullname}</b>
+    
+    if (user.email)
+        p Email: #{user.email}
+
+    if (user.phone)
+        p SDT: #{user.phone}
+    
+    p 
+        span Trang thai: 
+        span 
+            <b>#{user.status}</b>
+
+    if (role.title)
+        p Phan quyen: #{role.title}
+    
+    a(
+        href=`/${prefixAdmin}/my-account/edit`
+        class='btn btn-primary'
+    ) Chinh sua thong tin

@@ -1,0 +1,89 @@
+extends ../../layouts/default.pug 
+
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(2500)
+    +alert-error(3500)
+
+    .container.my-3 
+        .row 
+            .col-12
+                +box-head('Gio hang')
+        
+        .row 
+            .col-12
+                table(class='table table-bordered')
+                    thead
+                        tr
+                            th STT
+                            th Anh 
+                            th Ten
+                            th Gia
+                            th So luong
+                            th tong tien
+                    tbody
+                        if(cartDetail.products.length > 0)
+                            each product, index in cartDetail.products
+                                tr
+                                    td #{index + 1}
+                                    td
+                                        img(
+                                            src=product.productInfo.thumbnail
+                                            alt=product.productInfo.title
+                                            width='80px'
+                                        )
+                                    td #{product.productInfo.title}
+                                    td $#{product.productInfo.priceNew}
+                                    td #{product.quantity}
+                                    td $#{product.totalPrice}
+                        else
+                            tr
+                                td(
+                                    colspan='7'
+                                    class='text-center'
+                                ) Gio hang trong
+                if (cartDetail.products.length > 0)
+                    h3.text-right Tong don hang: $#{cartDetail.totalPrice}
+    
+    if(cartDetail.products.length > 0)
+        .row
+            .col-12
+                .card.p-4.my-4
+                    form(
+                        action='/checkout/order'
+                        method='POST'
+                    )
+                        .form-group
+                            lable(for='fullname') Ho ten
+                            input(
+                                type='text'
+                                class='form-control'
+                                id='fullname'
+                                name='fullname'
+                                required
+                            )
+                        .form-group
+                            label(for='phone') So dien thoai
+                            input(
+                                type='text'
+                                class='form-control'
+                                id='phone'
+                                name='phone'
+                                required
+                            )
+                        .form-group
+                            label(for='address') dia chi
+                            input(
+                                type='text'
+                                class='form-control'
+                                id='address'
+                                name='address'
+                                required
+                            )
+                        .form-group
+                            button(
+                                type='submit'
+                                class='btn btn-success btn-block'
+                            ) Dat hang

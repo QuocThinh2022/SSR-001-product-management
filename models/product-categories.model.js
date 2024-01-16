@@ -29,7 +29,7 @@ const productCategoriesSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            default: 'inactive'
+            default: 'active'
         }
     },{
         timestamps: true

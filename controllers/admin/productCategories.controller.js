@@ -24,7 +24,6 @@ async function getCreate(req, res) {
 
 // [POST] admin/product-categories/create
 async function createCategory(req, res) {
-    console.log(req.body)
 
     if (!req.body.title) {
         req.flash('error', 'Bat buoc nhap tieu de');

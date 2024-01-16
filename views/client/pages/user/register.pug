@@ -1,0 +1,47 @@
+extends ../../layouts/default.pug
+
+include ../../mixins/alert.pug
+
+block main
+    +alert-error(3500)
+
+    .container.my-5
+        .row.justify-content-center
+            .col-8
+                h1.text-center Dang ky tai khoan
+                form(
+                    action=`/user/register`
+                    method='POST'
+                )
+                    .form-group
+                        label(for='fullname') Ho va ten
+                        input(
+                            type='text'
+                            class='form-control'
+                            id='fullname'
+                            name='fullname'
+                            required
+                        )
+                    .form-group
+                        label(for='email') Email
+                        input(
+                            type='email'
+                            class='form-control'
+                            id='email'
+                            name='email'
+                            required
+                        )
+                    .form-group
+                        label(for='password') Mat khau
+                        input(
+                            type='password'
+                            class='form-control'
+                            id='password'
+                            name='password'
+                            required
+                        )
+                    .form-group
+                        button(
+                            type='submit'
+                            class='btn btn-primary btn-block'
+                        ) Dang ky

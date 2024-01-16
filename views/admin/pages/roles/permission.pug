@@ -1,0 +1,74 @@
+extends ../../layouts/default
+
+include ../../mixins/alert.pug
+include ../../mixins/table-permissions.pug
+
+block main 
+    +alert-success(2500)
+    +alert-error(3000)
+    div(data-records=roles)
+    h1(class='mb-4') Phan quyen
+
+    div(class='text-right')
+        button(
+            type='submit'
+            class='btn btn-primary mb-3'
+            button-submit
+        ) Update
+    -
+        let operators = [
+            {
+                group: "Danh muc san pham",
+                permissions: [
+                    ["Xem", "products-category_view"],
+                    ["Them moi", "products-category_create"],
+                    ["Chinh sua", "products-category_edit"],
+                    ["Xoa", "products-category_delete"]
+                ] 
+            },
+            {
+                group: "San pham",
+                permissions: [
+                    ["Xem", "products_view"],
+                    ["Them moi", "products_create"],
+                    ["Chinh sua", "products_edit"],
+                    ["Xoa", "products_delete"]
+                ] 
+            },
+            {
+                group: "Nhom quyen",
+                permissions: [
+                    ["Xem", "roles_view"],
+                    ["Them moi", "roles_create"],
+                    ["Chinh sua", "roles_edit"],
+                    ["Xoa", "roles_delete"],
+                    ["Phan quyen", "roles_permissions"]
+                ] 
+            },
+            {
+                group: 'Tai khoan',
+                permissions: [
+                    ['Xem', 'accounts_view'],
+                    ['Them moi', 'accounts_create'],
+                    ['Chinh sua', 'accounts_edit'],
+                    ['Xoa', 'accounts_delete'],
+                ]
+
+            }
+        ]
+    +table-permissions(roles, operators)
+
+    form(
+        id='form-change-permissions'
+        method="POST"
+        action=`/${prefixAdmin}/roles/permissions?_method=PATCH`
+        class='d-none'
+    )
+        .form-group 
+            input(
+                type='text'
+                class='form-control'
+                name='permissions'
+            )
+                        
+    script(src='/admin/js/role.js')

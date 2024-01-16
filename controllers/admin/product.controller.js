@@ -1,6 +1,8 @@
 
 const Products = require('../../models/product.model');
 const ProductCategories = require('../../models/product-categories.model');
+const Account = require('../../models/account.model');
+
 const filterStatusHelper = require('../../helpers/filterStatus');
 const searchHelper = require('../../helpers/search');
 const paginationHelper = require('../../helpers/pagination');
@@ -51,6 +53,18 @@ const index = async (req, res) => {
             .skip(objectPagination.skip)
             .limit(objectPagination.limitItem)
             .sort(sort);
+
+        for (const product of products) {
+            const userCreate = await Account.findById(product.createdBy.account_id)
+            if (userCreate)
+                product.createdBy.accountFullName = userCreate.fullname;
+
+            const userDelete = await Account.findById(product.deletedBy.account_id)
+            if (userDelete)
+                product.deletedBy.accountFullName = userDelete.fullname;
+     
+        }
+        
         if (isTrash) {
             res.render('admin/pages/products/trash.pug', {
                 pageTitle: 'page products',
@@ -96,7 +110,18 @@ const getProductEdit = async (req, res) => {
 const getProductDetail = async (req, res) => {
     try {
         const {pid} = req.params;
+        
         const product = await Products.findById(pid);
+
+        for (const obj of product.updatedBy) {
+            const user = await Account.findById(obj.account_id);
+            if (user) {
+                obj.accountFullName = user.fullname;
+            }
+        }
+        
+        product.updatedBy = product.updatedBy.reverse();
+        
         res.render('admin/pages/products/detail.pug', {pageTitle: 'Detail Product', product})
     } catch(error) {
         req.flash('error', 'san pham nay khong ton tai!');
@@ -123,26 +148,47 @@ const changeMulti = async (req, res) => {
     try {
         const type = req.body.type;
         const ids = req.body.ids.split(', ');
+        const updatedBy = {
+            account_id: res.locals.user.id,
+            updatedAt: new Date(),
+        }
 
         switch(type) {
             case 'active':
             case 'inactive':
-                await Products.updateMany({_id: {$in: ids}}, {status: type});
+                await Products.updateMany({_id: {$in: ids}}, {
+                    status: type,
+                    $push: {updatedBy}
+                });
                 req.flash('success', `Cap nhat trang thai thanh cong: ${ids.length} ban ghi`);
                 break;
             case 'change-position':
                 for (const item of ids) {
                     const [id, position] = item.split('-');
-                    await Products.findByIdAndUpdate(id, {position});
+                    await Products.findByIdAndUpdate(id, {
+                        position,
+                        $push: {updatedBy}
+                    });
                 }
                 req.flash('success', `Thay doi vi tri thanh cong: ${ids.length} ban ghi`);
                 break;
             case 'undo-all':
-                await Products.updateMany({_id: {$in : ids}}, {deleted: false, undodAt: new Date()});
+                await Products.updateMany({_id: {$in : ids}}, {
+                    deleted: false, 
+                    undodAt: new Date(),
+                    $push: {updatedBy}
+                });
                 req.flash('success', `Hoan tac thanh cong: ${ids.length} ban ghi`);
                 break;
             case 'delete-all':
-                await Products.updateMany({_id: {$in : ids}}, {deleted: true, deletedAt: new Date()});
+                await Products.updateMany({_id: {$in : ids}}, {
+                    deleted: true, 
+                    deletedBy: {
+                        account_id: res.locals.user.id,
+                        deletedAt: new Date(),
+                    },
+                    $push: {updatedBy}
+                });
                 req.flash('success', `xoa thanh cong: ${ids.length} ban ghi`);
                 break;
             case 'delete-trash-all':
@@ -169,7 +215,7 @@ const create = async(req, res) => {
             categories
         });
     } catch(error) {
-        throw new Error(error)
+        
     }
 }
 
@@ -190,6 +236,10 @@ const createProduct = async(req, res) => {
             req.body[req.file.fieldname] = req.file.path;
         }
 
+        req.body.createdBy = {
+            account_id: res.locals.user.id
+        }
+
         const product = new Products(req.body);
         await product.save();
         
@@ -197,7 +247,6 @@ const createProduct = async(req, res) => {
         res.redirect(`/${systemConfig.PREFIX_ADMIN}/products`)
     } catch(error) {
         req.flash('error', 'Tao san pham KHONG thanh cong!')
-        throw new Error(error)
     }
 }
 
@@ -214,12 +263,19 @@ const editProduct = async(req, res) => {
             req.body[req.file.fieldname] = req.file.path;
         }
 
-        await Products.findByIdAndUpdate(pid, req.body);
+        const updatedBy = {
+            account_id: res.locals.user.id,
+            updatedAt: new Date(),
+        }
+
+        await Products.findByIdAndUpdate(pid, {
+            ...req.body,
+            $push: {updatedBy}
+        });
         req.flash('success', 'Cap nhat san pham thanh cong!')
         res.redirect(`/${systemConfig.PREFIX_ADMIN}/products`)
     } catch(error) {
         req.flash('error', 'Cap nhat san pham KHONG thanh cong!')
-        throw new Error(error)
     }
 }
 
@@ -227,11 +283,17 @@ const editProduct = async(req, res) => {
 const deleteItem = async (req, res) => {
     try {
         const {pid} = req.params;
-        await Products.findByIdAndUpdate(pid, {deleted: true});
+        await Products.findByIdAndUpdate(pid, {
+            deleted: true,
+            deletedBy: {
+                account_id: res.locals.user.id,
+                deletedAt: new Date(),
+            }
+        });
         req.flash('success', `xoa thanh cong ban ghi`);
         res.redirect('back');
     } catch (error) {
-        throw new Error(error);
+        req.flash('error', 'xoa ban ghi that bai');
     }
 }
 
@@ -243,7 +305,7 @@ const undoIem = async (req, res) => {
         req.flash('success', 'Undo ban ghi thanh cong')
         res.redirect('back');
     } catch(error) {
-        throw new Error(error)
+        req.flash('error', 'Undo ban ghi that bai');
     }
 }
 
@@ -255,7 +317,7 @@ const deleteTrashItem = async (req, res) => {
         req.flash('success', 'Xoa ban ghi thanh cong');
         res.redirect('back');
    } catch (error) {
-    throw new Error(error)
+        req.flash('error', 'Xoa ban ghi that bai');
    }
 
 }

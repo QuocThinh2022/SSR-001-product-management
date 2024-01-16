@@ -1,0 +1,78 @@
+extends ../../layouts/default 
+
+include ../../mixins/alert.pug
+
+block main 
+    +alert-success(2500)
+    +alert-error(3000)
+
+    h1.mb-4 Chinh sua thong tin ca nhan 
+
+    form(
+        action=`/${prefixAdmin}/my-account/edit?_method=PATCH`
+        method='POST'
+        enctype='multipart/form-data'
+    )
+        div.form-group
+            label(for='fullname') Ho ten *
+            input(
+                type='text'
+                class='form-control'
+                id='fullname'
+                name='fullname'
+                required
+                value=user.fullname
+            )
+
+            div.form-group
+                label(for='email') Email *
+                input(
+                    type='email'
+                    class='form-control'
+                    id='email'
+                    name='email'
+                    required
+                    value=user.email
+                )
+            
+            div.form-group
+                label(for='password') Mat khau 
+                input(
+                    type='password'
+                    class='form-control'
+                    id='password'
+                    name='password'
+                )
+            div.form-group
+                label(for='phone') SDT 
+                input(
+                    type='phone'
+                    class='form-control'
+                    id='phone'
+                    name='phone'
+                    value=user.phone
+                )
+            
+            div(
+                class='form-group'
+                upload-image
+            )
+                label(for='avatar') Avatar 
+                input(
+                    type='file'
+                    class='form-control-file'
+                    id='avatar'
+                    name='avatar'
+                    accept='image/*'
+                    upload-image-input
+                )
+                img(
+                    src=user.avatar 
+                    class='image-preview'
+                    upload-image-preview
+                )
+                div.form-group
+                    button(
+                        type='submit'
+                        class='btn btn-primary'
+                    ) Update

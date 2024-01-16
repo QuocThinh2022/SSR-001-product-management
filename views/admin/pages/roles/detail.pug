@@ -1,0 +1,17 @@
+extends ../../layouts/default.pug 
+
+block main 
+    if (role.title)
+        h1(class='mb-4') Role: #{role.title}
+    if (role.description)
+        p Mo ta: #{role.description}
+    
+    if (role.permissions)
+        table 
+            thead
+                tr 
+                    th Permissions 
+            tbody 
+                each item in role.permissions 
+                    tr 
+                        td #{item}

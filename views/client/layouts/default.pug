@@ -1,0 +1,34 @@
+doctype html 
+html 
+    head 
+        title #{pageTitle}
+        link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css')
+        //- file-upload-with-preview
+        link(rel='stylesheet', href="https://unpkg.com/file-upload-with-preview/dist/style.css")
+        
+        link(rel="stylesheet", href="/css/style.css")
+        
+    body 
+        include ../partials/header.pug
+
+        block main
+
+        include ../partials/footer.pug
+
+        script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js')
+        script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js')
+
+        //- emoji picker element
+        script(type='module' src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js")        
+
+        //- file-upload-with-preview
+        script(src="https://unpkg.com/file-upload-with-preview/dist/file-upload-with-preview.iife.js")
+
+        //- SocketIO
+        script(src="/socket.io/socket.io.js")
+        script(src='/js/socket.js')
+        script(type='module' src='/js/chat.js')
+
+        script(src='/js/script.js')

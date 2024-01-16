@@ -34,16 +34,24 @@ block main
                                 td #{role.description}
                                 td 
                                     a(
-                                        class='btn btn-secondary btn-sm'
                                         href=`/${prefixAdmin}/roles/detail/${role.id}`
-                                    ) Detail 
+                                        class='btn btn-sm'
+                                    ) <i class="fa-regular fa-eye"></i>
                                     a(
-                                        class='btn btn-warning btn-sm ml-1'
                                         href=`/${prefixAdmin}/roles/edit/${role.id}`
-                                    ) Edit 
-                                    a(
+                                        class='btn btn-warning btn-sm'
+                                    ) <i class="fa-solid fa-pen-ruler"></i>
+                                    button(
                                         class='btn btn-danger btn-sm ml-1'
-                                    ) Del
+                                        button-delete-trash
+                                        data-id=role.id
+                                    ) <i class="fa-solid fa-trash"></i>
                     else 
                         tr 
                             td(colspan='4' class='text-center') Chua co nhom quyen nao duoc tao
+    form(
+        id='form-delete-trash-item'
+        method='POST'
+        action=``
+        data-path=`/${prefixAdmin}/roles/delete`
+    )

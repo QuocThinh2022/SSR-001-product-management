@@ -1,0 +1,61 @@
+extends ../../layouts/default.pug
+
+include ../../mixins/box-head.pug
+
+block main
+    .container.my-3
+        .row
+            .col-12
+                +box-head('dat hang thanh cong')
+        .row
+            .col-12
+                div(class='alert alert-success')
+                    | Chuc mung ban da dat hang thanh cong! Chung toi se xu ly don hang trong thoi gian som nhat.
+        if (order)
+            .row
+                .col-12
+                    h4.mb-2 Thong tin ca nhan
+                    table(class='table table-bordered')
+                        tbody
+                            tr
+                                td Ho ten
+                                td  
+                                    b #{order.userInfo.fullname}
+                            tr
+                                td So dien thoai
+                                td 
+                                    b #{order.userInfo.phone}
+                            tr
+                                td Dia chi
+                                td
+                                    b #{order.userInfo.address}
+            .row
+                .col-12
+                    h4.mb-2 Thong tin don hang
+                    table(class='table table-bordered')
+                        thead
+                            tr
+                                th STT
+                                th Anh 
+                                th Ten
+                                th Gia
+                                th So luong
+                                th Tong tien
+                        tbody
+                            if (order.products.length > 0)
+                                each product, index in order.products
+                                    tr
+                                        td #{index + 1}
+                                        td
+                                            img(
+                                                src=product.productInfo.thumbnail 
+                                                alt=product.productInfo.title
+                                                width='80px'
+                                            )
+                                        td #{product.productInfo.title}
+                                        td $#{product.priceNew}
+                                        td #{product.quantity}
+                                        td $#{product.totalPrice}
+                            
+                    if (order.products.length > 0)
+                        h3.text-right Tong don hang: $#{order.totalPrice}

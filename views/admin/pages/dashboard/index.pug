@@ -1,4 +1,32 @@
 extends ../../layouts/default 
 
 block main
-    h1 page dashboard
+    h1 Trang tong quan
+
+    .row.mt-4 
+        .col-12
+            .card.mb-4
+                .card-header Thong tin tai khoan
+                .card-body
+                    if(user.avatar)
+                        img(
+                            src=user.avatar
+                            style='height: 100px;margin-bottom: 15px;'
+                        )
+                    if(user.fullname)
+                        p Ho ten: <b>#{user.fullname}</b>
+                    if (user.email)
+                        p Email: <b>#{user.email}</b>
+                    if(user.phone)
+                        p So dien thoai: <b>#{user.phone}</b>
+                    if(role.title)
+                        p Phan quyen: <b>#{role.title}</b>
+    .row.mt-2
+        each item in statistic 
+            .col-6 
+                .card.mb-4
+                    .card-header #{item.title}
+                    .card-body
+                        p So luong: <b>#{item.total}</b>
+                        p Hoat dong: <b>#{item.active}</b>
+                        p Dung hoat dong: <b>#{item.inactive}</b>

@@ -1,0 +1,15 @@
+extends ../../layouts/default.pug
+
+include ../../mixins/alert.pug
+include ../../mixins/box-head.pug
+
+block main 
+    +alert-success(2500)
+    +alert-error(3500)
+
+    .container.my-3
+        .row 
+            .col-12
+                +box-head('thong tin tai khoan')
+        
+        div #{user}
