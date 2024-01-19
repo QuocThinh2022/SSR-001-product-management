@@ -69,18 +69,28 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
         ${imagesDisplay}
     `;
     bodyChat.appendChild(div);
-    bodyChat.scrollTop = bodyChat.scrollHeight;
+    bodyChat.scrollTop = bodyChat.scrollHeight; // scroll chat to bottom 
+
+    // viewer images 
+    const boxImages = div.querySelector('.inner-images');
+    if (boxImages) {
+        const gallery = new Viewer(boxImages); 
+    }
+
 })
 
 // End SERVER_RETURN_MESSAGE
 
-
-// scroll chat to bottom 
+// Chat Body
 const bodyChat = document.querySelector('.chat .inner-body');
 if (bodyChat) {
+    // scroll chat to bottom 
     bodyChat.scrollTop = bodyChat.scrollHeight;
+
+    // viewer images 
+    const gallery = new Viewer(bodyChat);
 }
-// end scroll chat to bottom 
+// end Chat Body
 
 // emoji picker 
 // show popup 
@@ -160,3 +170,4 @@ if (elementListTyping) {
 
 }
 // end SERVER_RETURN_TYPING 
+

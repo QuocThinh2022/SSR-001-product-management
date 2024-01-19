@@ -7,6 +7,9 @@ block main
         emoji-picker
 
     .container.my-3
+
+        include ../../partials/list-btn-users.pug
+
         .row
             .col-12
                 +box-head('chat')
@@ -51,3 +54,5 @@ block main
                                 i.fa-regular.fa-face-smile
                             button  
                                 i.fa-solid.fa-paper-plane
+    block script 
+        script(type='module' src='/js/chat.js')

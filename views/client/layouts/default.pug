@@ -6,7 +6,9 @@ html
         link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css')
         //- file-upload-with-preview
         link(rel='stylesheet', href="https://unpkg.com/file-upload-with-preview/dist/style.css")
-        
+        //- viewerjs
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.css")
+
         link(rel="stylesheet", href="/css/style.css")
         
     body 
@@ -26,9 +28,12 @@ html
         //- file-upload-with-preview
         script(src="https://unpkg.com/file-upload-with-preview/dist/file-upload-with-preview.iife.js")
 
+        //- viewerjs 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.js"></script>
+
         //- SocketIO
         script(src="/socket.io/socket.io.js")
         script(src='/js/socket.js')
-        script(type='module' src='/js/chat.js')
 
         script(src='/js/script.js')
+        block script
