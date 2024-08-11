@@ -1,0 +1,36 @@
+extends ../../layouts/default.pug
+
+include ../../mixins/box-head.pug
+
+block main 
+    div(class='tooltip' role='tooltip')
+        emoji-picker
+
+    .container.my-2
+
+        .row
+            .col-12
+                +box-head('Danh sach phong')
+        .row.my-2
+            .col-12
+                a(
+                    href='/rooms-chat/create'
+                    class='btn btn-sm btn-success mr-1'
+                ) + Tao phong
+        
+        .row
+            each room in rooms
+                .col-6 
+                    .box-room
+                        .inner-avatar
+                            img(
+                                src=room.avatar
+                                alt=room.title
+                            )
+                        .inner-info
+                            .inner-name #{room.title}
+                            .inner-buttons
+                                a(
+                                    href=`/chat/${room.id}`
+                                    class='btn btn-sm btn-primary mr-1'
+                                ) Nhan tin

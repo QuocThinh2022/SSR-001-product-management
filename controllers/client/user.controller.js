@@ -64,7 +64,11 @@ async function login(req, res) {
     }
     
     res.cookie('tokenUser', user.tokenUser)
-    
+    await User.findByIdAndUpdate(user.id, {statusOnline: 'online'})
+    _io.once('connection', (socket) => {
+        socket.broadcast.emit("SERVER_RETURN_USER_ONLINE", user.id)
+    })
+
     // const cart = await Cart.findOne({user_id: user.id});
     // if (!cart) {
         // luu user_id vao collection carts
@@ -80,6 +84,11 @@ async function login(req, res) {
 // [GET] /user/logout 
 async function getLogout(req, res) {
     res.clearCookie('tokenUser');
+    const userId = res.locals.user.id;
+    await User.findByIdAndUpdate(userId, {statusOnline: 'offline'})
+    _io.once('connection', (socket) => {
+        socket.broadcast.emit("SERVER_RETURN_USER_OFFLINE", userId)
+    })
     res.redirect('/')
 }
 

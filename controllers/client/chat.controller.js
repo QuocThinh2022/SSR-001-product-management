@@ -16,12 +16,17 @@ const User = require('../../models/user.model')
 
 const chatSocket = require('../../sockets/client/chat.socket')
 
+// [GET] /chat/:roomChatId 
 async function index(req, res) {
+    const roomChatId = req.params.roomChatId;
     // socketIO  
-    chatSocket(res);
+    chatSocket(req, res);
 
     //Lay ra data
-    const chats = await Chat.find({deleted: false});
+    const chats = await Chat.find({
+        deleted: false,
+        room_chat_id: roomChatId
+    });
     for (const chat of chats) {
         const infoUser = await User.findById(chat.user_id).select('fullname');
         chat.infoUser = infoUser;
